@@ -2,8 +2,8 @@
  *
  * Loads after components.js. Initializes reveal.js with a calm fade
  * transition, a brand-coloured progress bar, a native "current / total"
- * page number (bottom-right), subtle edge controls, a persistent talk-
- * title footer, and a discoverable overview-mode button (bottom-left).
+ * page number (bottom-right), subtle edge controls, and a discoverable
+ * overview-mode button (bottom-left).
  * Data is read from window.EMI_DATA, which build.py inlines into
  * index.html so the deck works offline under file:// (no fetch/CORS).
  *
@@ -13,9 +13,6 @@
 
 (function (global) {
   "use strict";
-
-  var TALK_TITLE =
-    "Generating Surrogates — Transformer-HyperNetwork for Wind Response";
 
   // Custom grid (slide-sorter) overview, built by EMI.slideGrid and
   // created on Reveal ready. Replaces reveal's native single-row
@@ -44,35 +41,6 @@
       slideGrid.close();
       syncOverviewButton();
     }
-  }
-
-  // Persistent footer carrying only the talk title (bottom-left). The
-  // live page number is rendered by reveal's native slide-number
-  // ("c/t", bottom-right) so it appears on every slide, including the
-  // title. The footer hides on any slide opting out via .no-footer or
-  // data-state="no-footer".
-  function installFooter() {
-    var footer = document.createElement("div");
-    footer.className = "deck-footer";
-
-    var titleSpan = document.createElement("span");
-    titleSpan.className = "footer-title";
-    titleSpan.textContent = TALK_TITLE;
-
-    footer.appendChild(titleSpan);
-    document.querySelector(".reveal").appendChild(footer);
-
-    function update() {
-      var slide = global.Reveal.getCurrentSlide();
-      var hide = slide && (
-        slide.classList.contains("no-footer") ||
-        slide.getAttribute("data-state") === "no-footer"
-      );
-      footer.classList.toggle("hidden", Boolean(hide));
-    }
-
-    global.Reveal.on("ready", update);
-    global.Reveal.on("slidechanged", update);
   }
 
   // Fixed, on-screen overview toggle (bottom-left) so the grid view is
@@ -147,7 +115,6 @@
     });
 
     global.Reveal.on("ready", function () {
-      installFooter();
       if (global.EMI && typeof global.EMI.slideGrid === "function") {
         slideGrid = global.EMI.slideGrid({ onChange: syncOverviewButton });
       }
