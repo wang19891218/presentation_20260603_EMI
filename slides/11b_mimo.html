@@ -1,0 +1,26 @@
+<!-- Owner: architect (task: dedicated MIMO input->output slide). Sorts to
+     page 12, between 11_diagnostic and 12_fix. -->
+<section>
+  <p class="eyebrow">Multi-input, multi-output</p>
+  <h2 class="headline">Multi-force input &rarr; multi-response
+    output.</h2>
+  <p class="lead" style="max-width:62ch;">The surrogate is MIMO: forces
+    at every floor map to displacements at every floor, matched against
+    FEM.</p>
+
+  <div class="chart" data-emi="mimo" data-load="wind"
+       style="height:56vh;"></div>
+
+  <aside class="notes">
+    This slide makes the MIMO nature explicit. TOP panel: the applied
+    wind forces — spatially non-uniform across floors (each floor sees a
+    different force history). BOTTOM panel: the resulting per-floor
+    displacement responses, FEM (solid blue) vs the surrogate (dashed
+    orange) — the model tracks every floor's response, not just one.
+
+    Switch load case with the buttons (wind / constant / sine / impulse):
+    constant/sine/impulse apply a spatially uniform force at every floor;
+    wind is genuinely non-uniform. The time sweep autoplays on entry.
+    One forward pass produces the full multi-floor response field.
+  </aside>
+</section>

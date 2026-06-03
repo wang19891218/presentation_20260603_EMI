@@ -1,0 +1,80 @@
+<!-- Owner: story-author -->
+<section>
+  <p class="eyebrow">Takeaways &middot; impact</p>
+  <h2 class="headline">One model, many buildings.</h2>
+
+  <div class="cols" style="gap: var(--space-4); align-items: flex-start; margin-top: 0.5em;">
+
+    <!-- Left: tight impact bullets -->
+    <div style="flex: 1 1 56%;">
+      <ul class="clean" style="font-size: 0.83em; line-height: 1.7;">
+        <li>
+          <strong>Cross-building generalization</strong> &mdash;
+          one trained model serves a heterogeneous portfolio with
+          no per-building retraining.
+        </li>
+        <li class="good">
+          <strong>~7,000&times; faster</strong> than OpenSees
+          (~80&thinsp;s/building, single CPU core).
+        </li>
+        <li class="good">
+          <strong>&lt;1&thinsp;% median NRMSE</strong> on 900
+          held-out buildings (0.89&thinsp;%).
+        </li>
+        <li>
+          <strong>Portfolio resilience + digital twins</strong>
+          &mdash; regional screening and scenario analysis now
+          tractable on ordinary GPU hardware.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right: KPIs + contact (inside card to keep in-frame) -->
+    <div style="flex: 0 1 40%; text-align: center;">
+      <div class="card" style="padding: var(--space-3) var(--space-3);">
+
+        <div class="stat" style="align-items: center; margin-bottom: 0.7em;">
+          <span class="stat-value" style="font-size: 2.0em; color: var(--primary);">7,000&times;</span>
+          <span class="stat-label" style="font-size: 0.58em;">speedup over OpenSees</span>
+        </div>
+
+        <div style="border-top: 1px solid var(--line); padding-top: 0.7em; margin-bottom: 0.7em;">
+          <div class="stat" style="align-items: center;">
+            <span class="stat-value good" style="font-size: 2.0em;">0.89&thinsp;%</span>
+            <span class="stat-label" style="font-size: 0.58em;">median NRMSE &middot; 900 test buildings</span>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--line); padding-top: 0.7em; text-align: center;">
+          <p style="font-size: 0.66em; font-weight: 600; color: var(--ink); margin: 0 0 0.15em;">
+            Haifeng Wang &middot; Washington State University
+          </p>
+          <a href="mailto:haifeng.wang@wsu.edu"
+             style="font-size: 0.60em; color: var(--primary);
+                    font-family: var(--font-mono); text-decoration: none;">
+            haifeng.wang@wsu.edu
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <aside class="notes">
+    Close on impact — two core messages.
+
+    First: one model, many buildings. The HyperNetwork generates
+    building-specific LSTM weights from a feature vector at inference
+    time — no per-building training, no fine-tuning. A single trained
+    model covers the full heterogeneous portfolio.
+
+    Second: speed. OpenSees takes ~80 s per building on a single CPU
+    core. In batched GPU inference the surrogate is ~7,000× faster,
+    making portfolio-scale studies feasible on ordinary hardware.
+
+    Future work: extending to more complex load types and
+    physics-informed training for improved extrapolation and reduced
+    data demand.
+  </aside>
+</section>

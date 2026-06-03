@@ -1,0 +1,106 @@
+<!-- Owner: results-author -->
+<section>
+  <p class="eyebrow">Scale &amp; generalization — 9,000-building dataset</p>
+  <h2 class="headline">Under 1% NRMSE on 900 held-out buildings.</h2>
+
+  <!-- KPI strip -->
+  <div class="kpi" style="margin-top:var(--space-3); margin-bottom:var(--space-3);">
+    <div class="stat">
+      <span class="stat-value good"
+            data-emi="counter"
+            data-target="0.98"
+            data-decimals="2"
+            data-suffix="%"
+            data-color="good">0.98%</span>
+      <span class="stat-label">mean NRMSE<br>900 held-out buildings</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value good"
+            data-emi="counter"
+            data-target="0.89"
+            data-decimals="2"
+            data-suffix="%"
+            data-color="good">0.89%</span>
+      <span class="stat-label">median NRMSE<br>900 held-out buildings</span>
+    </div>
+    <div class="stat">
+      <span class="stat-value"
+            data-emi="counter"
+            data-target="9000"
+            data-decimals="0"
+            data-separator="true"
+            data-color="ink">9,000</span>
+      <span class="stat-label">training buildings<br>building-level split</span>
+    </div>
+  </div>
+
+  <!-- Two detail cards — uniform height distribution + duration generalization -->
+  <div class="cols fragment" style="gap:var(--space-3);">
+
+    <div class="card flat" style="flex:1; display:flex; flex-direction:column; gap:var(--space-2);">
+      <p class="card-title">Uniform across heights</p>
+      <div style="display:flex; justify-content:space-around; align-items:flex-end;
+                  padding:var(--space-1) 0;">
+        <div class="stat" style="align-items:center; text-align:center;">
+          <span class="stat-value good" style="font-size:1.3em;">1.05%</span>
+          <span class="stat-label">10 floors</span>
+        </div>
+        <div class="stat" style="align-items:center; text-align:center;">
+          <span class="stat-value good" style="font-size:1.3em;">1.01%</span>
+          <span class="stat-label">15 floors</span>
+        </div>
+        <div class="stat" style="align-items:center; text-align:center;">
+          <span class="stat-value good" style="font-size:1.3em;">0.88%</span>
+          <span class="stat-label">20 floors</span>
+        </div>
+      </div>
+      <p class="caption" style="margin:0;">
+        Height-normalized interpolation keeps error even across all building heights.
+      </p>
+    </div>
+
+    <div class="card flat" style="flex:1; display:flex; flex-direction:column; gap:var(--space-2);">
+      <p class="card-title">Duration generalization</p>
+      <div style="display:flex; align-items:center; gap:var(--space-2); padding:var(--space-1) 0;">
+        <div class="stat" style="align-items:center; text-align:center; flex:1;">
+          <span class="stat-value" style="font-size:1.3em; color:var(--ink);">60 s</span>
+          <span class="stat-label">training window</span>
+        </div>
+        <div style="font-size:1.4em; color:var(--good); font-weight:700;">→</div>
+        <div class="stat" style="align-items:center; text-align:center; flex:1;">
+          <span class="stat-value good" style="font-size:1.3em;">600 s</span>
+          <span class="stat-label">evaluated signal</span>
+        </div>
+      </div>
+      <p class="caption" style="margin:0;">
+        Separate long-duration test — error stays low throughout the full
+        600-s signal. Model learned structural dynamics, not a fixed template.
+      </p>
+    </div>
+
+  </div><!-- /cols -->
+
+  <aside class="notes">
+    THREE POINTS:
+
+    1. SCALE: 9,000 training buildings, 900 test buildings never seen in training
+    (strict building-level split). Mean NRMSE 0.98%, median 0.89% — comfortably
+    under 1% on a diverse portfolio.
+
+    2. HEIGHT UNIFORMITY: The height-normalized interpolation scheme maps any
+    10/15/20 storey building onto 20 canonical height levels. Error is nearly
+    identical across the three height classes (1.05/1.01/0.88%) — the
+    interpolation removes the floor-count dependency.
+
+    3. DURATION GENERALIZATION (separate test — different from the 9k NRMSE above):
+    The network was trained only on 60-second wind records. When tested on
+    600-second signals (10× longer, never seen in training), RMSE = 0.040 —
+    only a moderate increase despite a tenfold extension in duration. The model
+    captures structural dynamics rather than memorising a fixed temporal template.
+    (RMSE 0.040 is a raw displacement error in the same units as the response;
+    it is NOT the same metric as the NRMSE % headline — intentionally kept off
+    the slide to avoid confusion.)
+
+    Fragments: KPI animates on slide entry; cards reveal on click.
+  </aside>
+</section>

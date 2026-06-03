@@ -1,0 +1,114 @@
+<!-- Owner: method-author. Height-normalized interpolation — CSS building diagram with fragments. -->
+<section>
+  <p class="eyebrow">Height normalization</p>
+  <h2 class="headline">10 / 15 / 20 stories — one shared 20-point grid.</h2>
+  <p class="lead wide">Map each building's floor responses to a fixed
+    normalized-height axis so every output is always active.</p>
+
+  <!-- Building diagram: three buildings + mapping → normalized axis.
+       Buildings use a repeating gradient (9 px slab + 3 px joint = 12 px/floor)
+       so 10×12 = 120 px, 15×12 = 180 px, 20×12 = 240 px — consistent scale.
+       The normalized axis uses the same period in --accent (orange). -->
+  <div style="display:flex;gap:2.5rem;align-items:stretch;justify-content:center;margin:1rem 0;">
+
+    <!-- 10-story building -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0.4rem;height:265px;">
+      <div style="width:56px;height:120px;
+                  background:repeating-linear-gradient(
+                    to bottom,
+                    var(--primary) 0, var(--primary) 9px,
+                    var(--bg-alt)  9px, var(--bg-alt) 12px);
+                  border:1px solid var(--line);
+                  border-radius:4px 4px 0 0;"></div>
+      <span style="font-family:var(--font-mono);font-size:0.42em;
+                   color:var(--ink-mute);">10 stories</span>
+    </div>
+
+    <!-- 15-story building -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0.4rem;height:265px;">
+      <div style="width:56px;height:180px;
+                  background:repeating-linear-gradient(
+                    to bottom,
+                    var(--primary) 0, var(--primary) 9px,
+                    var(--bg-alt)  9px, var(--bg-alt) 12px);
+                  border:1px solid var(--line);
+                  border-radius:4px 4px 0 0;"></div>
+      <span style="font-family:var(--font-mono);font-size:0.42em;
+                   color:var(--ink-mute);">15 stories</span>
+    </div>
+
+    <!-- 20-story building -->
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:0.4rem;height:265px;">
+      <div style="width:56px;height:240px;
+                  background:repeating-linear-gradient(
+                    to bottom,
+                    var(--primary) 0, var(--primary) 9px,
+                    var(--bg-alt)  9px, var(--bg-alt) 12px);
+                  border:1px solid var(--line);
+                  border-radius:4px 4px 0 0;"></div>
+      <span style="font-family:var(--font-mono);font-size:0.42em;
+                   color:var(--ink-mute);">20 stories</span>
+    </div>
+
+    <!-- Arrow + normalized axis: revealed together on first click. -->
+    <div class="fragment" style="display:flex;align-items:center;gap:1.2rem;height:265px;">
+
+      <!-- Arrow label -->
+      <div style="display:flex;flex-direction:column;align-items:center;
+                  gap:0.3rem;padding-bottom:1.4em;">
+        <span style="font-family:var(--font-mono);font-size:0.4em;
+                     color:var(--ink-mute);">interpolate</span>
+        <span style="font-size:2em;line-height:1;
+                     color:var(--ink-mute);">&#8594;</span>
+      </div>
+
+      <!-- 20-point normalized axis (orange, same 12 px period) -->
+      <div style="display:flex;flex-direction:column;align-items:center;
+                  justify-content:flex-end;gap:0.4rem;height:265px;">
+        <div style="width:28px;height:240px;
+                    background:repeating-linear-gradient(
+                      to bottom,
+                      var(--accent) 0, var(--accent) 9px,
+                      var(--bg-alt) 9px, var(--bg-alt) 12px);
+                    border:1px solid var(--line);
+                    border-radius:4px;"></div>
+        <span style="font-family:var(--font-mono);font-size:0.42em;
+                     color:var(--ink-mute);">20-pt norm. grid</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Benefit chips: appear on second click. -->
+  <div class="fragment" style="display:flex;gap:var(--space-2);flex-wrap:wrap;
+                                margin-top:var(--space-1);">
+    <span class="chip bad">Zero-padding: inactive floors waste capacity</span>
+    <span class="chip good">Interpolation: all 20 outputs always active</span>
+  </div>
+
+  <!-- Accuracy stats: appear on third click. -->
+  <p class="caption fragment" style="text-align:center; margin-top:0.4em;">
+    6.83&thinsp;M parameters &middot; population mean NRMSE:
+    1.05&thinsp;% (10-story) &middot; 1.01&thinsp;% (15-story)
+    &middot; 0.88&thinsp;% (20-story) — error is uniform across story counts
+  </p>
+
+  <aside class="notes">
+    The 9,000-building expanded dataset has buildings with 10, 15, or 20 stories
+    (three floor-count levels in the full-factorial grid).
+
+    The naive approach — zero-padding all buildings to a 20-floor vector — forces
+    the model to learn that the top 10 outputs are identically zero for a 10-storey
+    building. That wastes half the output capacity and makes no physical sense.
+
+    The adopted solution: linearly interpolate each building's N-storey response
+    onto a common 20-point normalized-height grid (0 = ground level, 1 = rooftop).
+    Every one of the 20 output points receives a physically valid response value
+    regardless of floor count. The evaluation code reports NRMSE over all 20
+    normalized outputs with no masking required.
+
+    Result: the interpolation model has 6,828,964 parameters and achieves a mean
+    NRMSE of 0.98% across 900 test buildings — better than the zero-padded variant
+    at essentially the same architecture cost.
+  </aside>
+</section>

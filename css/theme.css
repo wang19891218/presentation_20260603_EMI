@@ -1,0 +1,417 @@
+/* EMI 2026 deck — design system and slide primitives.
+ *
+ * Single source of truth for palette, typography, and the reusable
+ * slide building blocks (eyebrow, headline, lead, card, stat, kpi,
+ * cols, chip, caption, footer). Apple / Material light aesthetic:
+ * generous whitespace, restrained colour, hairline borders.
+ *
+ * All colours MUST come from the CSS variables below. Slides and
+ * components must never hard-code hex values.
+ */
+
+:root {
+  /* ---- Palette (from the team brief) ---------------------------- */
+  --ink:        #1d1d1f;   /* primary text (near-black) */
+  --ink-soft:   #4b4b4f;   /* secondary text */
+  --ink-mute:   #6e6e73;   /* captions, labels (darkened for contrast) */
+  --bg:         #ffffff;   /* slide background */
+  --bg-alt:     #f5f5f7;   /* panels, cards */
+  --line:       #d2d2d7;   /* hairlines, borders */
+  --primary:    #0071e3;   /* structural blue — FEM curve, accents */
+  --primary-dk: #0a4fa0;
+  --accent:     #ff9f0a;   /* warm — NN curve, highlights (sparing) */
+  --good:       #34c759;   /* PASS / improvement green */
+  --bad:        #ff3b30;   /* FAIL / OOD red */
+  --shadow:     0 6px 24px rgba(0, 0, 0, 0.08);
+
+  /* Soft tints derived from the core colours, for fills. */
+  --primary-tint: rgba(0, 113, 227, 0.10);
+  --accent-tint:  rgba(255, 159, 10, 0.12);
+  --good-tint:    rgba(52, 199, 89, 0.12);
+  --bad-tint:     rgba(255, 59, 48, 0.10);
+
+  /* ---- Type ----------------------------------------------------- */
+  --font-sans: -apple-system, "SF Pro Display", "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  /* ---- Spacing scale -------------------------------------------- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.25rem;
+  --space-5: 3.5rem;
+  --radius: 14px;
+}
+
+/* ---- Reveal slide canvas ---------------------------------------- */
+.reveal {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  /* Generous padding so content breathes; reveal centres the block.
+   * The bottom padding reserves a chrome band (footer, progress bar,
+   * page number, controls) so slide content never collides with or is
+   * clipped by it. */
+  padding: 10px 2.5% 76px;
+}
+
+/* ---- Typography primitives -------------------------------------- */
+.reveal .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.reveal .headline {
+  font-size: 1.35em;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.reveal .headline.huge {
+  font-size: 1.7em;
+}
+
+.reveal .lead {
+  font-size: 0.92em;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--ink-soft);
+  max-width: 26ch;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.reveal .lead.wide {
+  max-width: 40ch;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.reveal strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.reveal em.hi {
+  font-style: normal;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.reveal em.hi-accent {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.reveal code,
+.reveal .mono {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+/* ---- Layout: two (or more) columns ------------------------------ */
+.reveal .cols {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.reveal .cols > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.reveal .cols.middle {
+  align-items: center;
+}
+
+.reveal .col-narrow {
+  flex: 0 1 38%;
+}
+
+.reveal .col-wide {
+  flex: 1 1 62%;
+}
+
+/* ---- Card ------------------------------------------------------- */
+.reveal .card {
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  box-shadow: var(--shadow);
+}
+
+.reveal .card.flat {
+  box-shadow: none;
+}
+
+.reveal .card .card-title {
+  font-size: 0.6em;
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-1) 0;
+}
+
+/* ---- Stat / KPI ------------------------------------------------- */
+.reveal .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.reveal .stat .stat-value {
+  font-size: 1.9em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.reveal .stat .stat-value.accent { color: var(--accent); }
+.reveal .stat .stat-value.good { color: var(--good); }
+.reveal .stat .stat-value.bad { color: var(--bad); }
+.reveal .stat .stat-value.ink { color: var(--ink); }
+
+.reveal .stat .stat-label {
+  font-size: 0.5em;
+  color: var(--ink-mute);
+  line-height: 1.3;
+}
+
+/* A KPI row: several stats spread across the slide. */
+.reveal .kpi {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.reveal .kpi .stat {
+  flex: 1 1 0;
+  min-width: 7rem;
+}
+
+/* ---- Chip ------------------------------------------------------- */
+.reveal .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.55em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.reveal .chip.primary {
+  background: var(--primary-tint);
+  border-color: transparent;
+  color: var(--primary-dk);
+}
+
+.reveal .chip.accent {
+  background: var(--accent-tint);
+  border-color: transparent;
+  color: var(--accent);
+}
+
+.reveal .chip.good {
+  background: var(--good-tint);
+  border-color: transparent;
+  color: var(--good);
+}
+
+.reveal .chip.bad {
+  background: var(--bad-tint);
+  border-color: transparent;
+  color: var(--bad);
+}
+
+.reveal .chip .dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---- Legend (FEM / NN colour key) ------------------------------- */
+.reveal .legend {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.5em;
+  color: var(--ink-soft);
+}
+
+.reveal .legend .key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.reveal .legend .swatch {
+  width: 1.4rem;
+  height: 0.18rem;
+  border-radius: 2px;
+}
+
+.reveal .legend .swatch.fem { background: var(--primary); }
+.reveal .legend .swatch.nn { background: var(--accent); }
+.reveal .legend .swatch.ref {
+  background: repeating-linear-gradient(
+    90deg, var(--ink-mute) 0 4px, transparent 4px 7px);
+}
+
+/* ---- Caption ---------------------------------------------------- */
+.reveal .caption {
+  font-size: 0.45em;
+  color: var(--ink-mute);
+  line-height: 1.4;
+  margin-top: var(--space-1);
+}
+
+.reveal figure {
+  margin: 0;
+}
+
+.reveal figure img {
+  max-width: 100%;
+  max-height: 62vh;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+/* ---- Component mount points ------------------------------------- */
+.reveal .chart {
+  width: 100%;
+  height: 52vh;
+  position: relative;
+}
+
+.reveal .chart.short { height: 40vh; }
+.reveal .chart.tall { height: 64vh; }
+
+/* Graceful placeholder when a component has no data yet. */
+.reveal .chart .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+  color: var(--ink-mute);
+  font-family: var(--font-mono);
+  font-size: 0.5em;
+  padding: var(--space-3);
+}
+
+/* ---- Footer (talk title) ---------------------------------------- */
+/* Carries only the talk title (bottom-left). The page number is the
+ * reveal-native "c/t" pill (bottom-right). Left offset clears the
+ * overview-toggle button that sits at the bottom-left corner. */
+.reveal .deck-footer {
+  position: fixed;
+  bottom: 30px;
+  left: 64px;
+  right: 54%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  z-index: 30;
+  pointer-events: none;
+}
+
+.reveal .deck-footer .footer-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Title slide and any .no-footer section hide the chrome. */
+.reveal .deck-footer.hidden {
+  display: none;
+}
+
+/* ---- Title-slide helpers ---------------------------------------- */
+.reveal .title-block .kicker {
+  font-family: var(--font-mono);
+  font-size: 0.5em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.reveal .authors {
+  font-size: 0.6em;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.reveal .authors .affil {
+  color: var(--ink-mute);
+  font-size: 0.85em;
+}
+
+/* ---- Misc lists ------------------------------------------------- */
+.reveal ul.clean {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.reveal ul.clean > li {
+  position: relative;
+  padding-left: 1.4rem;
+  margin-bottom: var(--space-2);
+}
+
+.reveal ul.clean > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.reveal ul.clean > li.accent::before { background: var(--accent); }
+.reveal ul.clean > li.good::before { background: var(--good); }
+.reveal ul.clean > li.bad::before { background: var(--bad); }

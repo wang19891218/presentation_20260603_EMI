@@ -1,0 +1,45 @@
+<!-- Owner: story-author -->
+<section>
+  <p class="eyebrow">Live verification</p>
+  <h2 class="headline">Probe any load — surrogate vs. FEM, on demand.</h2>
+
+  <p style="font-size: 0.82em; color: var(--ink-soft); margin: 0 0 var(--space-2) 0; line-height: 1.5;">
+    Probe any load class live &mdash; the surrogate verified against a fresh FEM run on demand.
+    No cached data. Every verdict is a new execution.
+  </p>
+
+  <!-- Full-width chart; sine default shows resonant tracking, clearly distinct from slide 8 wind -->
+  <div class="chart"
+       data-emi="overlay"
+       data-load="sine"
+       data-controls="true"
+       data-play="true"></div>
+
+  <p class="caption" style="margin-top: 0.4em;">
+    Demonstration building (top-floor displacement) &mdash; H&nbsp;85&nbsp;m &middot; 15F &middot; &zeta;&nbsp;0.02.
+    Resonant sine shown. Switch load class with the controls above.
+  </p>
+
+  <aside class="notes">
+    This slide is the interactive demo — it should feel live. The architect
+    has wired auto-play so the time-cursor sweeps on slide entry; the
+    audience sees the surrogate tracking the resonant sine in real time.
+
+    Default: sine (near-resonance) — visually distinct from slide 8's wind
+    overlay and shows the harder tracking problem. Switch to constant,
+    impulse, or wind using the load-class buttons at any point.
+
+    The visualization tool runs OpenSees and the trained surrogate
+    back-to-back on the same load realization — no caching, no pre-baked
+    arrays. Both run against the same building and seed, so any accuracy
+    difference is attributable to the model alone.
+
+    The demonstration building (H 85 m, W 25 m, D 25 m, 15 floors,
+    damping 0.02, density 200 kg/m³) sits off the structured height grid
+    to also exercise height-axis interpolation.
+
+    Key message: the surrogate is deployable and verifiable — you can
+    probe any building-load pair against a live FEM reference at any time,
+    not just at training time.
+  </aside>
+</section>

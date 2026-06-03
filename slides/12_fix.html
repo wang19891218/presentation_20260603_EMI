@@ -1,0 +1,72 @@
+<!-- Owner: story-author -->
+<section>
+  <p class="eyebrow">Beyond wind</p>
+  <h2 class="headline">Complex loads — strong results, one honest limit.</h2>
+
+  <div class="cols" style="gap: var(--space-4); align-items: flex-start; margin-top: 0.4em;">
+
+    <!-- Left: final per-class NRMSE (no version labels) -->
+    <div style="flex: 0 1 28%;">
+      <p style="font-size: 0.74em; color: var(--ink-soft); margin-bottom: var(--space-2); line-height: 1.5;">
+        Population mean NRMSE &mdash; 900 held-out buildings:
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 0.55em;">
+        <div class="stat">
+          <span class="stat-value" style="font-size: 1.15em;">1.25&thinsp;%</span>
+          <span class="stat-label">Wind</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value good" style="font-size: 1.15em;">4.6&thinsp;%</span>
+          <span class="stat-label">Constant</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value good" style="font-size: 1.15em;">13.7&thinsp;%</span>
+          <span class="stat-label">Sine (near-resonance)</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value bad" style="font-size: 1.15em;">54.2&thinsp;%</span>
+          <span class="stat-label">Impulse &mdash; current limit</span>
+        </div>
+      </div>
+      <p class="caption" style="margin-top: var(--space-2);">
+        Impulse shown honestly. More complex loads are active future work.
+      </p>
+    </div>
+
+    <!-- Right: bar chart (final per-class, staged by fragments) -->
+    <div style="flex: 1 1 72%;">
+      <div class="chart short"
+           data-emi="bars"
+           data-metric="population_nrmse"></div>
+      <!-- 4 hidden fragments: each reveals one load-class bar -->
+      <span class="fragment" style="display: none;"></span>
+      <span class="fragment" style="display: none;"></span>
+      <span class="fragment" style="display: none;"></span>
+      <span class="fragment" style="display: none;"></span>
+      <p style="font-size: 0.78em; color: var(--bad); margin-top: 0.5em; line-height: 1.4;">
+        Impulse remains the limit — 54.2&thinsp;% NRMSE.
+      </p>
+      <p class="caption" style="margin-top: 0.2em;">
+        Constant (4.6&thinsp;%) and sine (13.7&thinsp;%) are strong. Click to reveal each load class.
+      </p>
+    </div>
+
+  </div>
+
+  <aside class="notes">
+    The model was trained and tested on four load classes. Wind: excellent
+    at 1.25% population mean NRMSE on 900 held-out buildings. Constant
+    and near-resonance sine: strong results (4.6% and 13.7%). Impulse
+    at 54.2% is an honest current limitation — it reflects the difficulty
+    of short-duration impulsive loading for an autoregressive time-domain
+    LSTM rollout, and it is shown in red rather than buried.
+
+    All numbers are population means over 900 held-out test buildings,
+    fully disjoint from the 7,200 training buildings.
+
+    The bar chart stages one load class at a time per fragment click
+    (wind, constant, sine, impulse). Extending to richer and more complex
+    load types — including improving impulse coverage — is active future
+    work covered on the next slide.
+  </aside>
+</section>

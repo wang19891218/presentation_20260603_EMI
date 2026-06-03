@@ -1,0 +1,61 @@
+<!-- Owner: intro-author -->
+<section>
+  <p class="eyebrow">The problem</p>
+
+  <div class="cols middle" style="gap: var(--space-5);">
+
+    <!-- LEFT: headline + animated stats -->
+    <div class="col-wide">
+      <h2 class="headline">Portfolio-scale wind resilience is
+        computationally prohibitive.</h2>
+
+      <div class="kpi" style="margin-bottom: var(--space-3);">
+        <div class="stat">
+          <span class="stat-value"
+                data-emi="counter" data-target="80" data-suffix=" s">— s</span>
+          <span class="stat-label">OpenSees per building<br>single CPU core</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value ink"
+                data-emi="counter" data-target="9000" data-color="ink">—</span>
+          <span class="stat-label">buildings in a<br>regional portfolio</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value accent"
+                data-emi="counter" data-target="20"
+                data-suffix=" h" data-color="accent">— h</span>
+          <span class="stat-label">wall-clock to simulate<br>900 test buildings</span>
+        </div>
+      </div>
+
+      <p class="lead">
+        One nonlinear time-history analysis per building, per hazard scenario.
+        Multiply by thousands of structures —
+        direct simulation is impractical at portfolio scale.
+      </p>
+    </div>
+
+    <!-- RIGHT: slide 02 hero image -->
+    <div class="col-narrow" style="text-align: center;">
+      <img src="assets/slide02_hero.png?v=2"
+           alt="Portfolio-scale wind assessment — many heterogeneous buildings under wind loading"
+           style="width: 100%; max-height: 46vh; object-fit: contain;
+                  border-radius: var(--radius); box-shadow: var(--shadow);">
+      <p style="font-size: 0.46em; font-family: var(--font-mono);
+                color: var(--ink-soft); margin-top: var(--space-1);
+                letter-spacing: 0.03em;">
+        Portfolio-scale wind assessment spans large,<br>heterogeneous building inventories
+      </p>
+    </div>
+
+  </div>
+
+  <aside class="notes">
+    Numbers from results.json: opensees_s_per_building = 80, n_buildings_9k = 9000.
+    900 buildings × 80 s ≈ 20 h on a single core — just the held-out test set.
+    A full portfolio with multiple hazard realizations is orders of magnitude larger.
+    Image (slide02_hero.png): generated hero — motivates the scale problem.
+    figure_006 (160-building Times Square OSM map) is reserved for slide 07.
+    Do NOT mention the speedup here — save it for slide 10.
+  </aside>
+</section>

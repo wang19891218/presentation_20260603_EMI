@@ -1,0 +1,27 @@
+<!-- Owner: intro-author -->
+<section>
+  <p class="eyebrow">The gap</p>
+  <h2 class="headline">Conventional surrogates don't transfer
+    across buildings.</h2>
+
+  <!-- Native SVG diagram (EMI.diagramOneVsMany): real, slide-scaled
+       text — replaces the pre-rendered raster. Fallback asset:
+       assets/slide03_one_vs_many.svg. -->
+  <div class="chart" data-emi="diagram-one-vs-many"
+       style="height: 56vh; margin: var(--space-1) 0;"></div>
+
+  <p class="lead wide">
+    Different <strong>height, stiffness, damping, mass</strong> —
+    one surrogate per building doesn't transfer.
+  </p>
+
+  <aside class="notes">
+    Key point: cross-building generalization is the fundamental bottleneck.
+    Transfer learning still requires target data and degrades when structural
+    properties differ significantly (Pan 2020, Tan 2018).
+    The SVG (slide03_one_vs_many.svg) shows the contrast: many per-building
+    models on the left vs one shared HyperNetwork on the right.
+    Walk through the left side first (many N₁…Nₙ boxes, retrain each time),
+    then pivot right (single HyperNet box, adapts from features).
+  </aside>
+</section>

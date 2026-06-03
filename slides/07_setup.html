@@ -1,0 +1,125 @@
+<!-- Owner: method-author. Case study setup — Times Square map prominent (figure_006),
+     bilinear stiffness (figure_007), 9k feature space (figure_008). Static offline figures.
+
+     Layout: THREE columns so figure_007 and figure_008 each get a full column height
+     instead of being stacked. This lets both reach max-height:40vh (≈288 px on a 720p
+     display, ≈432 px on 1080 p) rather than the previous 18vh (≈130 px on 720p).
+     Column 3 carries an accent label to give the 9,000-building grid visual weight.
+
+     Budget worst-case (1080 p viewport height = 1080 px):
+       eyebrow + headline            ≈ 130 px
+       col 1 (44 %): map 28vh=302   + caption 30 + margin 16 + chips 34  = 382 px
+       col 2/3 (equal): label 20    + fig 40vh=432 + caption 30          = 482 px ← tallest
+       grand total  130 + 482 = 612 px ≤ 720 px ✓
+
+     Column widths (flex container = 1216 px, gap = 24 px × 2 = 48 px):
+       col 1: flex:0 0 44% → 0.44×1216 = 535 px
+       col 2/3: flex:1 1 0 → (1216−535−48)/2 ≈ 316 px each
+-->
+<section>
+  <p class="eyebrow">Experimental setup</p>
+  <h2 class="headline">Times Square–calibrated benchmark — scaled to 9,000.</h2>
+
+  <!-- Custom flex (not .cols) so child flex values aren't overridden by
+       .cols > * { flex: 1 1 0 }. Three columns: map · stiffness · feature space. -->
+  <div style="display:flex;gap:var(--space-3);align-items:flex-start;">
+
+    <!-- ── Column 1: Times Square map (primary visual, 44 %) ─────────── -->
+    <div style="flex:0 0 44%;min-width:0;">
+      <figure>
+        <img src="assets/figure_006.png?v=4"
+             alt="85 OSM buildings near Times Square colored by height — reference for the synthetic benchmark"
+             style="max-height:28vh;width:100%;object-fit:contain;">
+        <p class="caption">85 real buildings near Times Square
+          (<strong>OpenStreetMap</strong>, 50–123 m) — the reference
+          for the synthetic benchmark.</p>
+      </figure>
+      <!-- Three compact chips — fit in one row at 535 px column width. -->
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:var(--space-2);">
+        <span class="chip primary">160 synthetic cases · 128/16/16 split</span>
+        <span class="chip">80 configs × 2 wind realizations</span>
+        <span class="chip">60 s wind records</span>
+      </div>
+    </div>
+
+    <!-- ── Column 2: Bilinear stiffness model (figure_007) ───────────── -->
+    <div style="flex:1 1 0;min-width:0;">
+      <p style="font-family:var(--font-mono);font-size:0.42em;
+                text-transform:uppercase;letter-spacing:0.09em;
+                color:var(--ink-mute);margin:0 0 var(--space-1) 0;">Bilinear stiffness</p>
+      <figure>
+        <!-- Native SVG (EMI.diagramBilinear): crisp slide-scaled glyphs
+             (k0, gamma*k0, delta_y, F_y). Fallback: assets/figure_007.png. -->
+        <div class="chart" data-emi="diagram-bilinear"
+             style="height:32vh;width:100%;"></div>
+        <!-- Full symbol legend (matches the diagram glyphs exactly). -->
+        <div class="caption" style="text-align:left;line-height:1.55;
+                                    font-size:0.56em;
+                                    margin-top:var(--space-1);">
+          <strong>F</strong> restoring force &middot;
+          <strong>x</strong> displacement<br>
+          <strong>k<sub>0</sub></strong> initial (elastic) stiffness<br>
+          <strong>F<sub>y</sub></strong> yield force &middot;
+          <strong>&#948;<sub>y</sub></strong> yield displacement<br>
+          <strong>&#947;</strong> post-yield ratio
+          &#8712; [0.05,&#8202;0.10] &middot;
+          <strong>&#947;k<sub>0</sub></strong> post-yield stiffness
+        </div>
+      </figure>
+    </div>
+
+    <!-- ── Column 3: 9,000-building feature grid (figure_008) ───────── -->
+    <!-- Accent label gives the expanded dataset prominent visual weight. -->
+    <div style="flex:1 1 0;min-width:0;">
+      <p style="font-family:var(--font-mono);font-size:0.42em;
+                text-transform:uppercase;letter-spacing:0.09em;
+                color:var(--accent);margin:0 0 var(--space-1) 0;">9,000-building feature grid</p>
+      <figure>
+        <img src="assets/figure_008.png?v=2"
+             alt="Feature distributions — training (blue) vs test (red)"
+             style="max-height:32vh;width:100%;object-fit:contain;">
+        <!-- Feature symbol legend (matches the center-column format). -->
+        <div class="caption" style="text-align:left;line-height:1.55;
+                                    font-size:0.56em;
+                                    margin-top:var(--space-1);">
+          <strong>H</strong> height &middot;
+          <strong>W</strong> width &middot;
+          <strong>D</strong> depth<br>
+          <strong>&#950;</strong> damping ratio &middot;
+          <strong>&#961;</strong> density<br>
+          <strong>N<sub>s</sub></strong> number of stories &middot;
+          <strong>f</strong> fundamental frequency<br>
+          Full-factorial over 7 features; training (blue) spans the
+          test portfolio (red).
+        </div>
+      </figure>
+    </div>
+
+  </div>
+
+  <aside class="notes">
+    Open with the map: 85 real OSM buildings near Times Square (50–123 m) —
+    these are the REFERENCE whose geometry and height distribution calibrate
+    the synthetic benchmark. The 160 benchmark cases are SYNTHETIC: 80
+    parametric building configs (16 heights × 5 damping ratios) × 2 wind
+    realizations each, split 128 train / 16 val / 16 test by case.
+    Five conditioning features: height H, first-mode frequency f,
+    post-yield ratio γ, damping ratio ζ, density ρ_B.
+
+    Structural model (figure_007, center): bilinear storey stiffness — linear
+    up to yield displacement δ_y, then post-yield stiffness = γ k_0, γ ∈ [0.05,
+    0.10] per Hong 2004. Buildings remain linear under 300-year MRI wind.
+
+    Feature space (figure_008, right): expanded 9,000-building full-factorial
+    grid over 7 features — height (8 levels: 50–120 m), width (5: 15–35 m),
+    depth (5: 15–35 m), damping ratio (5: 1–5%), density (3: 160–240 kg/m³),
+    floor count (3: 10/15/20 stories), fundamental frequency derived by Rayleigh.
+    Split 7,200 training / 900 validation / 900 test. The accent column header
+    ("9,000-building feature grid") draws the eye to this key scaling result.
+
+    Wind loading: Hilbert-wavelet simulation (Wang 2020) → per-floor forces via
+    quasi-steady theory, drag coefficients from the Tokyo Polytechnic University
+    aerodynamic database. Record duration: 60 s.
+    Deck fully offline — all figures are static local assets under assets/.
+  </aside>
+</section>

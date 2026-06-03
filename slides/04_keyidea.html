@@ -1,0 +1,35 @@
+<!-- Owner: intro-author -->
+<section>
+  <p class="eyebrow">Key idea</p>
+  <h2 class="headline">Generate the response network's weights
+    from the building's feature vector.</h2>
+
+  <!-- figure_001 in a card frame so it integrates with the deck's flat style -->
+  <div style="margin: var(--space-3) 0; text-align: center;">
+    <div class="card" style="display: inline-block;
+         padding: var(--space-2); background: var(--bg);
+         border-color: var(--line); max-width: 88%;">
+      <img src="assets/figure_001.png?v=2"
+           alt="HyperNetwork architecture: building features → Transformer WGM → generated LSTM weights → conditional LSTM → response"
+           style="max-height: 38vh; width: auto; max-width: 100%;
+                  object-fit: contain; display: block;">
+    </div>
+  </div>
+
+  <!-- Single-sentence punchline — 04 = the idea; 05 = the mechanism -->
+  <p class="lead wide">
+    One HyperNetwork reads building features and generates a dedicated
+    response predictor — <strong>one trained model, any building</strong>.
+  </p>
+
+  <aside class="notes">
+    This is the conceptual crux. Stress "one trained model → all buildings."
+    Walk through figure_001 left-to-right: building feature vector →
+    per-feature token embedding → Transformer self-attention →
+    generated LSTM weights → conditional LSTM unrolled over time →
+    floor displacement response curve.
+    "No retraining" is the key selling point for portfolio-scale deployment.
+    Slide 04 = the IDEA (what it is). Slide 05 = the MECHANISM (animated pipeline).
+    Keep it short here — one sentence is enough before moving to the walkthrough.
+  </aside>
+</section>

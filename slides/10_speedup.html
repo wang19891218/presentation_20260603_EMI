@@ -1,0 +1,65 @@
+<!-- Owner: results-author -->
+<section>
+  <p class="eyebrow">Computational efficiency</p>
+  <h2 class="headline">~7,000&times; faster than single-core OpenSees.</h2>
+
+  <!-- Speedup component — main visual -->
+  <div class="chart" data-emi="speedup"></div>
+
+  <!-- Portfolio context — compact two-card strip -->
+  <div class="cols" style="gap:var(--space-3); margin-top:var(--space-2);">
+
+    <div class="card flat" style="flex:1; display:flex; align-items:center; gap:var(--space-3);">
+      <div class="stat" style="align-items:center; text-align:center; flex:1;">
+        <span class="stat-value bad"
+              data-emi="counter"
+              data-target="80"
+              data-decimals="0"
+              data-suffix=" s"
+              data-color="bad">80 s</span>
+        <span class="stat-label">OpenSees / building<br>single CPU core</span>
+      </div>
+      <div style="font-size:1.3em; color:var(--good); font-weight:700;">→</div>
+      <div class="stat" style="align-items:center; text-align:center; flex:1;">
+        <span class="stat-value good"
+              data-emi="counter"
+              data-target="7000"
+              data-decimals="0"
+              data-suffix="&times;"
+              data-separator="true"
+              data-color="good">7,000&times;</span>
+        <span class="stat-label">HyperNetwork<br>batched GPU inference</span>
+      </div>
+    </div>
+
+    <div class="card flat" style="flex:1; display:flex; align-items:center; gap:var(--space-3);">
+      <div class="stat" style="align-items:center; text-align:center; flex:1;">
+        <span class="stat-value accent" style="font-size:1.4em;">≈ 20 h</span>
+        <span class="stat-label">OpenSees<br>portfolio of 900</span>
+      </div>
+      <div style="font-size:1.3em; color:var(--good); font-weight:700;">→</div>
+      <div class="stat" style="align-items:center; text-align:center; flex:1;">
+        <span class="stat-value good" style="font-size:1.4em;">seconds</span>
+        <span class="stat-label">HyperNetwork<br>same 900 buildings</span>
+      </div>
+    </div>
+
+  </div><!-- /cols -->
+
+  <aside class="notes">
+    HEADLINE: single-core OpenSees takes ~80 s per building. The HyperNetwork
+    with batched GPU inference is ~7,000× faster.
+
+    PORTFOLIO IMPLICATION: 900 buildings × 80 s = 72,000 s ≈ 20 hours in
+    OpenSees (single core). HyperNetwork completes the same portfolio in
+    seconds — enabling real-time digital-twin updates and disaster
+    preparedness screening.
+
+    The EMI.speedup animation shows a proportional two-track comparison —
+    not 7,000 literal bars, but a visual that conveys the scale of the gap.
+
+    Note for Q&A: speedup is against single-core OpenSees. Multi-core
+    parallelism would narrow the gap, but batched GPU inference over a
+    full portfolio still wins decisively on total throughput.
+  </aside>
+</section>

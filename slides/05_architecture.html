@@ -1,0 +1,56 @@
+<!-- Owner: method-author. Architecture hero — EMI.architecture staged by fragments. -->
+<section>
+  <p class="eyebrow">Architecture</p>
+  <h2 class="headline">From features to response — one forward pass.</h2>
+
+  <div class="chart tall" data-emi="architecture"></div>
+
+  <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);flex-wrap:wrap;align-items:center;">
+    <span class="chip primary">Transformer WGM</span>
+    <span class="chip">2 layers · dim 64 · 2 heads · FFN 256</span>
+    <span class="chip">Dense → LSTM×3 → Dense</span>
+    <span class="chip accent">Weights generated, not stored</span>
+  </div>
+
+  <!-- Five silent fragments drive EMI.architecture stage by stage.
+       Each fragmentshown event advances the SVG diagram one stage:
+       0 (initial) Building features (H, W, D, ζ, ρ, N_s, f)
+       1           Per-feature tokens + positional embeddings
+       2           Transformer self-attention (2 layers, dim 64, 2 heads)
+       3           Mean-pool → project → generated weight tensors
+       4           Conditional Dense–LSTM×3–Dense network loaded
+       5           Response curve (20 normalized-height outputs) -->
+  <p class="fragment" style="display:none;"></p>
+  <p class="fragment" style="display:none;"></p>
+  <p class="fragment" style="display:none;"></p>
+  <p class="fragment" style="display:none;"></p>
+  <p class="fragment" style="display:none;"></p>
+
+  <aside class="notes">
+    Click once per stage; deliver one sentence each.
+
+    Stage 0 (shown on entry): Seven building features enter the model — height,
+    width, depth, damping ratio, density, floor count, and fundamental frequency
+    (derived analytically by the Rayleigh method for the 9k dataset).
+
+    Stage 1 (click 1): Instead of treating the feature vector as one dense input,
+    each scalar is individually embedded as a token with a learned positional
+    encoding, so the model sees every feature as its own representation.
+
+    Stage 2 (click 2): A 2-layer Transformer encoder — embedding dimension 64,
+    two attention heads — applies self-attention across all feature tokens and
+    models cross-feature interactions explicitly before anything is generated.
+
+    Stage 3 (click 3): Tokens are mean-pooled and linearly projected to produce
+    the full set of layer-weight tensors; the building description alone generates
+    every parameter of the response network.
+
+    Stage 4 (click 4): Generated weights load a conditional Dense → LSTM × 3 →
+    Dense response network — no stored weights; the building features govern every
+    gate, every affine map inside the network.
+
+    Stage 5 (click 5): The network unrolls over the 60-second wind record and
+    produces floor displacements at 20 normalized heights in a single forward pass —
+    one trained model, any building, no retraining.
+  </aside>
+</section>

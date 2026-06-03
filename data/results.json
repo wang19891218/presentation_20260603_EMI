@@ -1,0 +1,138 @@
+{
+  "population_nrmse": {
+    "wind": {
+      "v1": 0.0099,
+      "v2": 0.0185,
+      "v3": 0.0125
+    },
+    "constant": {
+      "v1": 2.94,
+      "v2": 0.077,
+      "v3": 0.046
+    },
+    "sine": {
+      "v1": 12.0,
+      "v2": 0.31,
+      "v3": 0.137
+    },
+    "impulse": {
+      "v1": 22.9,
+      "v2": 0.8,
+      "v3": 0.542
+    }
+  },
+  "headline": {
+    "nrmse_160_before": 0.087,
+    "nrmse_160_after": 0.017,
+    "nrmse_9k_mean_pct": 0.98,
+    "nrmse_9k_median_pct": 0.89,
+    "speedup": 7000,
+    "opensees_s_per_building": 80,
+    "n_buildings_9k": 9000,
+    "n_test": 900
+  },
+  "scalability": [
+    {
+      "metric": "Features N_F",
+      "b160": "5",
+      "k9_zeropad": "7",
+      "k9_interp": "7"
+    },
+    {
+      "metric": "Training buildings",
+      "b160": "128",
+      "k9_zeropad": "7200",
+      "k9_interp": "7200"
+    },
+    {
+      "metric": "Test buildings",
+      "b160": "16",
+      "k9_zeropad": "900",
+      "k9_interp": "900"
+    },
+    {
+      "metric": "Split protocol",
+      "b160": "simulation",
+      "k9_zeropad": "simulation",
+      "k9_interp": "building-level"
+    },
+    {
+      "metric": "Output representation",
+      "b160": "10 floors",
+      "k9_zeropad": "40 slots",
+      "k9_interp": "20 heights"
+    },
+    {
+      "metric": "Parameters",
+      "b160": "6,828,324",
+      "k9_zeropad": "7.08M",
+      "k9_interp": "6.83M"
+    },
+    {
+      "metric": "Mean RMSE",
+      "b160": "0.0004",
+      "k9_zeropad": "0.0035",
+      "k9_interp": "2.67e-4"
+    },
+    {
+      "metric": "Mean NRMSE (%)",
+      "b160": "1.70",
+      "k9_zeropad": "6.46",
+      "k9_interp": "0.98"
+    },
+    {
+      "metric": "Median NRMSE (%)",
+      "b160": null,
+      "k9_zeropad": null,
+      "k9_interp": "0.89"
+    },
+    {
+      "metric": "NRMSE std (%)",
+      "b160": null,
+      "k9_zeropad": null,
+      "k9_interp": "0.37"
+    },
+    {
+      "metric": "NRMSE 10F/15F/20F (%)",
+      "b160": null,
+      "k9_zeropad": null,
+      "k9_interp": "1.05/1.01/0.88"
+    },
+    {
+      "metric": "Training time",
+      "b160": null,
+      "k9_zeropad": null,
+      "k9_interp": "~4 h"
+    }
+  ],
+  "stratified_sine": [
+    {
+      "bin": "< 0.85 (sub-resonance)",
+      "v3_n": 164,
+      "v3_mean": 0.096,
+      "v2_n": 314,
+      "v2_mean": 0.184
+    },
+    {
+      "bin": "[0.85, 1.15] (resonance)",
+      "v3_n": 445,
+      "v3_mean": 0.133,
+      "v2_n": 152,
+      "v2_mean": 0.396
+    },
+    {
+      "bin": "> 1.15 (super-resonance)",
+      "v3_n": 291,
+      "v3_mean": 0.165,
+      "v2_n": 434,
+      "v2_mean": 0.37
+    },
+    {
+      "bin": "[0.95, 1.05] (tight resonance)",
+      "v3_n": 150,
+      "v3_mean": 0.13,
+      "v2_n": 53,
+      "v2_mean": 0.351
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "emiDataPresent": true,
+  "totalSlides": 14,
+  "progressBarPresent": true,
+  "overviewBtnPresent": false,
+  "slides": [
+    {
+      "slide": 1,
+      "title": "HyperNetwork with Transformer-Based\n      Weight Generation ",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_01.png"
+    },
+    {
+      "slide": 2,
+      "title": "Portfolio-scale wind resilience is\n        computationally p",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_02.png"
+    },
+    {
+      "slide": 3,
+      "title": "Conventional surrogates don't transfer\n    across buildings.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_03.png"
+    },
+    {
+      "slide": 4,
+      "title": "Generate the response network's weights\n    from the buildin",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_04.png"
+    },
+    {
+      "slide": 5,
+      "title": "From features to response — one forward pass.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": true,
+      "screenshot": "slide_05.png"
+    },
+    {
+      "slide": 6,
+      "title": "10 / 15 / 20 stories — one shared 20-point grid.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_06.png"
+    },
+    {
+      "slide": 7,
+      "title": "160 Times Square buildings — scaled to 9,000.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_07.png"
+    },
+    {
+      "slide": 8,
+      "title": "NRMSE drops five-fold on unseen buildings.",
+      "pageNum": null,
+      "hasCanvas": true,
+      "hasSvg": false,
+      "screenshot": "slide_08.png"
+    },
+    {
+      "slide": 9,
+      "title": "Under 1% NRMSE on 900 held-out buildings.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_09.png"
+    },
+    {
+      "slide": 10,
+      "title": "~7,000× faster than OpenSees per building.",
+      "pageNum": null,
+      "hasCanvas": true,
+      "hasSvg": false,
+      "screenshot": "slide_10.png"
+    },
+    {
+      "slide": 11,
+      "title": "The visualization surfaced what metrics alone could not.",
+      "pageNum": null,
+      "hasCanvas": true,
+      "hasSvg": false,
+      "screenshot": "slide_11.png"
+    },
+    {
+      "slide": 12,
+      "title": "Three curriculum stages collapse the error.",
+      "pageNum": null,
+      "hasCanvas": true,
+      "hasSvg": false,
+      "screenshot": "slide_12.png"
+    },
+    {
+      "slide": 13,
+      "title": "Two residuals — and the road ahead.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_13.png"
+    },
+    {
+      "slide": 14,
+      "title": "One model, many buildings.",
+      "pageNum": null,
+      "hasCanvas": false,
+      "hasSvg": false,
+      "screenshot": "slide_14.png"
+    }
+  ],
+  "componentChecks": {
+    "slide5_architecture_svg": true,
+    "slide8_overlay_canvas": true,
+    "slide10_speedup": true,
+    "slide12_bars": true
+  },
+  "consoleErrors": [],
+  "allConsoleLogs": []
+}

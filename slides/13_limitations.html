@@ -1,0 +1,51 @@
+<!-- Owner: story-author -->
+<section>
+  <p class="eyebrow">Looking ahead</p>
+  <h2 class="headline">Future directions.</h2>
+
+  <ul class="clean" style="font-size: 0.86em; line-height: 1.75; margin-top: 0.8em; max-width: 70ch;">
+
+    <li class="accent">
+      <strong>More complex loads &mdash; the immediate next step.</strong>
+      Improve impulse coverage; extend to blast, multi-hazard, and
+      arbitrary broadband excitations.
+    </li>
+
+    <li class="accent">
+      <strong>Physics-informed&thinsp;/&thinsp;knowledge-enhanced training</strong>
+      &mdash; embed governing equations to improve extrapolation and
+      cut data demand for larger, more diverse inventories.
+    </li>
+
+    <li class="accent">
+      <strong>Richer features + 3D models</strong> &mdash;
+      image and BIM-driven building representations; extend to 3D FEM
+      with torsional and complex nonlinear behavior.
+    </li>
+
+  </ul>
+
+  <aside class="notes">
+    Keep this slide forward-looking and light. The model is a strong
+    working foundation; these are natural, well-motivated next steps.
+
+    Most immediate: extending to more complex loads. Impulse at 54.2%
+    NRMSE is the clearest gap to close first. The training amplitude
+    envelope [0.48, 1.16] MN is the most tractable near-term fix —
+    regenerating the impulse dataset under U(0.5, 5.0) MN would close
+    the OOD gap at the cost of a new generation run. Phase drift under
+    sustained near-resonance sine (~39 cycles over 60 s) is a known
+    limitation of autoregressive LSTM rollout; a phase-aware loss term
+    is the clean separable extension.
+
+    Physics-informed / knowledge-enhanced training (KEDL-style,
+    Wang 2020) would embed governing equations into the training
+    objective, improving extrapolation and reducing data demand.
+    This is future work — the current model is a pure time-domain
+    Huber-loss objective.
+
+    Richer features (images, BIM) and 3D structural models are
+    longer-horizon directions that would substantially broaden the
+    applicability of the framework.
+  </aside>
+</section>
