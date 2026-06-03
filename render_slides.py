@@ -15,7 +15,7 @@ from playwright.sync_api import sync_playwright
 OUT_DIR = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("qa/round6")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-N_SLIDES = 17
+N_SLIDES = 18
 BASE_URL = "http://127.0.0.1:8770"
 W, H = 1280, 720
 
