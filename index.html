@@ -264,6 +264,142 @@
   </aside>
 </section>
 
+      <!-- 05b_wgm.html -->
+<!-- Owner: method-author. WGM ablation: MLP generator collapses, Transformer doesn't. -->
+<section>
+  <p class="eyebrow">Why a Transformer?</p>
+  <h2 class="headline">A plain MLP generator collapses &mdash; the Transformer doesn&rsquo;t.</h2>
+
+  <div class="cols" style="gap: var(--space-4); align-items: flex-start; margin-top: var(--space-2);">
+
+    <!-- Left: two stat cards -->
+    <div style="flex: 0 1 36%; display: flex; flex-direction: column; gap: var(--space-2);">
+
+      <div class="card" style="padding: var(--space-2) var(--space-3);
+                                border-left: 3px solid var(--ink-mute);">
+        <p style="margin: 0 0 0.25em; font-size: 0.5em; font-family: var(--font-mono);
+                  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-mute);">
+          MLP weight generator
+        </p>
+        <div class="stat" style="gap: 0.4em;">
+          <span class="stat-value bad" style="font-size: 1.3em;">0.070</span>
+          <span class="stat-label">best RMSE (2 000 ep.)</span>
+        </div>
+        <p style="margin: 0.4em 0 0; font-size: 0.48em; color: var(--ink-soft); line-height: 1.5;">
+          Standard 500-ep. run collapses to flat / mean &mdash;
+          RMSE &asymp;&thinsp;0.116, output std &lt;&thinsp;5% of target
+        </p>
+      </div>
+
+      <div class="card" style="padding: var(--space-2) var(--space-3);
+                                border-left: 3px solid var(--primary);">
+        <p style="margin: 0 0 0.25em; font-size: 0.5em; font-family: var(--font-mono);
+                  text-transform: uppercase; letter-spacing: 0.07em; color: var(--primary);">
+          Transformer weight generator
+        </p>
+        <div class="stat" style="gap: 0.4em;">
+          <span class="stat-value good" style="font-size: 1.3em;">0.012</span>
+          <span class="stat-label">RMSE &mdash; no collapse</span>
+        </div>
+        <p style="margin: 0.4em 0 0; font-size: 0.48em; color: var(--ink-soft); line-height: 1.5;">
+          Per-feature tokens + self-attention converge
+          reliably, every run, &asymp;&thinsp;500 epochs
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Right: proportional bar chart + verdict chips + why-line -->
+    <div style="flex: 1 1 60%; display: flex; flex-direction: column; gap: var(--space-2);">
+
+      <!-- Bar chart: bars scaled relative to MLP = 100% -->
+      <div style="display: flex; flex-direction: column; gap: 1em;">
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;
+                      margin-bottom: 0.3em;">
+            <span style="font-family: var(--font-mono); font-size: 0.54em;
+                         font-weight: 600; color: var(--ink-soft);">MLP generator</span>
+            <span style="font-family: var(--font-mono); font-size: 0.54em;
+                         font-weight: 700; color: var(--bad);">0.070</span>
+          </div>
+          <div style="background: var(--bg-alt); border-radius: 999px; height: 18px; overflow: hidden;">
+            <div style="background: var(--ink-mute); border-radius: 999px;
+                        height: 100%; width: 100%;"></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;
+                      margin-bottom: 0.3em;">
+            <span style="font-family: var(--font-mono); font-size: 0.54em;
+                         font-weight: 600; color: var(--primary);">Transformer generator</span>
+            <span style="font-family: var(--font-mono); font-size: 0.54em;
+                         font-weight: 700; color: var(--good);">0.012</span>
+          </div>
+          <div style="background: var(--bg-alt); border-radius: 999px; height: 18px; overflow: hidden;">
+            <!-- 0.012 / 0.070 = 17.1 % -->
+            <div style="background: var(--primary); border-radius: 999px;
+                        height: 100%; width: 17.1%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Verdict chips -->
+      <div style="display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center;
+                  margin-top: var(--space-1);">
+        <span class="chip good">&asymp;&thinsp;6&times; better RMSE</span>
+        <span class="chip primary">No collapse</span>
+        <span class="chip">MLP needs 4&times; longer training to reach 0.070</span>
+      </div>
+
+      <!-- Why-line -->
+      <p style="font-size: 0.7em; color: var(--ink-soft); line-height: 1.65;
+                max-width: 54ch; margin: var(--space-1) 0 0;">
+        Per-feature tokens + self-attention capture cross-feature structure
+        (e.g. how height interacts with damping). The MLP sees a flat feature
+        vector and gets stuck predicting the mean &mdash; a loss-plateau
+        failure mode.
+      </p>
+
+    </div>
+
+  </div>
+
+  <p class="caption" style="margin-top: var(--space-2);">
+    Single-building diagnostic (RMSE on building&nbsp;0) &mdash; separate from the
+    160-case benchmark NRMSE (0.017).
+  </p>
+
+  <aside class="notes">
+    This is an ablation study on the weight-generator (WGM) architecture.
+    All numbers come from a single-building diagnostic on building 0 —
+    do NOT conflate RMSE 0.012 with the population NRMSE 0.017 headline.
+
+    MLP weight generator: the standard 500-epoch run consistently collapses.
+    Loss plateaus at approximately 0.0136; the model's output std-ratio falls
+    below 5% of the target signal's std — it is effectively predicting the
+    mean at every timestep (flat-output failure). Only a 2000-epoch
+    progressive training schedule breaks the plateau, reaching a best RMSE
+    of 0.070. That is still approximately 5.8× worse than the Transformer,
+    and requires 4× the training compute.
+
+    Transformer weight generator: RMSE 0.012, achieved routinely in a
+    standard 500-epoch run. No collapse observed. The structural reason:
+    each of the seven building features (H, W, D, ζ, ρ, N_s, f₁) is
+    embedded as its own token, and the two-layer self-attention encoder
+    models cross-feature interactions explicitly before generating the
+    response-network weights. The MLP has no such structure — it cannot
+    discover those interactions reliably within the available parameter
+    budget and training budget.
+
+    Key message: the choice of Transformer as the weight generator is not
+    cosmetic — it is the critical design decision that prevents the model
+    from collapsing.
+  </aside>
+</section>
+
       <!-- 06_interpolation.html -->
 <!-- Owner: method-author. Height-normalized interpolation — CSS building diagram with fragments. -->
 <section>
