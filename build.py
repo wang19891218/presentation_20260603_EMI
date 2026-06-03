@@ -12,6 +12,13 @@ The build is idempotent: it rewrites only the regions delimited by the
 stable HTML-comment markers and leaves everything else untouched, so it
 can be re-run safely any number of times.
 
+Cache-busting: each rebuild appends ``?v=<token>`` to the local JS/CSS
+references (js/components.js, js/deck.js, css/theme.css,
+css/reveal-overrides.css). The token is the first 8 hex characters of the
+SHA-256 hash of those files' concatenated contents, so it only changes
+when the files actually change and the build stays fully deterministic
+(no Date.now() / random).
+
 Markers in ``index.html``:
     <!--SLOT:slides:start--> ... <!--SLOT:slides:end-->
     <!--SLOT:data:start-->   ... <!--SLOT:data:end-->
@@ -22,6 +29,7 @@ Usage:
 Pure Python 3 standard library; no third-party dependencies.
 """
 
+import hashlib
 import json
 import pathlib
 import re
@@ -48,6 +56,15 @@ DATA_FILES = {
     "mimo.json": "mimo",
     "wgm_compare.json": "wgmCompare",
 }
+
+# Local JS/CSS assets that receive a content-hash cache-buster on every build.
+# CDN / dist/ files are intentionally excluded.
+LOCAL_ASSETS = [
+    "js/components.js",
+    "js/deck.js",
+    "css/theme.css",
+    "css/reveal-overrides.css",
+]
 
 
 def collect_slides() -> str:
@@ -142,6 +159,52 @@ def replace_region(
     return pattern.sub(lambda _match: replacement, document, count=1)
 
 
+def asset_version() -> str:
+    """Compute a short content-hash token from all local JS/CSS assets.
+
+    The hash covers the concatenated bytes of every file listed in
+    ``LOCAL_ASSETS`` (missing files are silently skipped). Using a content
+    hash keeps builds deterministic — the token changes only when the file
+    content changes, never from the clock or randomness.
+
+    Returns:
+        First 8 hex characters of the SHA-256 digest.
+    """
+    digest = hashlib.sha256()
+    for name in LOCAL_ASSETS:
+        path = DIRECTORY_ROOT / name
+        if path.exists():
+            digest.update(path.read_bytes())
+    return digest.hexdigest()[:8]
+
+
+def stamp_assets(document: str, token: str) -> str:
+    """Append ``?v=<token>`` to every local JS/CSS reference in the document.
+
+    Any existing ``?v=...`` suffix is replaced so repeated builds do not
+    accumulate stacked query parameters. Only exact filename matches listed
+    in ``LOCAL_ASSETS`` are touched; CDN / dist/ paths are left unchanged.
+
+    Args:
+        document: Full text of index.html (before writing back).
+        token:    Cache-buster token, typically from ``asset_version()``.
+
+    Returns:
+        The document with updated ``src``/``href`` attributes.
+    """
+    for name in LOCAL_ASSETS:
+        # Match  src="name"  or  src="name?v=anything"  (and href=).
+        # The full relative path anchors the substitution so no CDN URL
+        # whose basename happens to match is affected.
+        escaped = re.escape(name)
+        pattern = re.compile(
+            r'((?:src|href)="' + escaped + r')(?:\?v=[^"]*)?(")'
+        )
+        replacement = r"\g<1>?v=" + token + r"\g<2>"
+        document = pattern.sub(replacement, document)
+    return document
+
+
 def main() -> int:
     """Read index.html, inject slides and data, and write it back.
 
@@ -162,14 +225,17 @@ def main() -> int:
     document = replace_region(
         document, MARKER_DATA_START, MARKER_DATA_END, collect_data()
     )
+    token = asset_version()
+    document = stamp_assets(document, token)
     PATH_INDEX.write_text(document, encoding="utf-8")
     slide_count = len(list(DIRECTORY_SLIDES.glob("*.html")))
     present_data = [
         name for name in DATA_FILES if (DIRECTORY_DATA / name).exists()
     ]
     print(
-        "built index.html: {0} slide file(s), data inlined: {1}".format(
-            slide_count, present_data or "none"
+        "built index.html: {0} slide file(s), data inlined: {1}, "
+        "asset version: {2}".format(
+            slide_count, present_data or "none", token
         )
     )
     return 0
