@@ -2582,6 +2582,202 @@
   };
 
   // =================================================================
+  // EMI.wgmTimeHistory — three-line time-history chart showing
+  // FEM reference vs Transformer-generated vs MLP-generated response.
+  // The MLP renders as a near-flat horizontal line (collapsed output);
+  // the Transformer closely tracks the FEM reference.
+  //   Data:  window.EMI_DATA.wgmCompare  (wgm_compare.json, inlined)
+  //   Hook:  <div class="chart tall" data-emi="wgm-timehistory"></div>
+  //   Lines: reference = ink-mute (grey), transformer = primary (blue),
+  //          mlp = bad (red / flat)
+  // Print-safe (static canvas). Degrades to placeholder if data missing.
+  // =================================================================
+  EMI.wgmTimeHistory = function (element) {
+    var data = emiData().wgmCompare;
+
+    if (!data || !data.t) {
+      drawPlaceholder(
+        element,
+        "EMI.wgmTimeHistory — wgm_compare.json not loaded yet (WGM time-history)"
+      );
+      return { redraw: function () {}, destroy: function () {} };
+    }
+
+    var pal = palette();
+    var canvasState = null;
+
+    function build() {
+      canvasState = mountCanvas(element);
+      draw();
+    }
+
+    function draw() {
+      if (!canvasState) {
+        return;
+      }
+      var time = data.t;
+      var reference = data.reference;
+      var mlp = data.mlp;
+      var transformer = data.transformer;
+
+      var context = canvasState.context;
+      var width = canvasState.width;
+      var height = canvasState.height;
+      context.clearRect(0, 0, width, height);
+
+      var padLeft = 66;
+      var padRight = 18;
+      var padTop = 40;   // extra top room for the legend row
+      var padBottom = 42;
+      var plotW = width - padLeft - padRight;
+      var plotH = height - padTop - padBottom;
+
+      // Y extent across all three series, padded for headroom.
+      var allValues = reference.concat(mlp).concat(transformer);
+      var yExtent = extent(allValues);
+      var yPad = (yExtent[1] - yExtent[0]) * 0.08;
+      yExtent = [yExtent[0] - yPad, yExtent[1] + yPad];
+
+      var tExtent = extent(time);
+
+      function sx(t) {
+        return padLeft +
+          ((t - tExtent[0]) / (tExtent[1] - tExtent[0])) * plotW;
+      }
+      function sy(y) {
+        return padTop +
+          (1 - (y - yExtent[0]) / (yExtent[1] - yExtent[0])) * plotH;
+      }
+
+      // ---- Horizontal grid lines + y-axis labels ----
+      context.font = "600 15px " + pal.fontMono;
+      context.textAlign = "right";
+      context.textBaseline = "middle";
+      var yTicks = 4;
+      for (var i = 0; i <= yTicks; i += 1) {
+        var yValue = yExtent[0] + (i / yTicks) * (yExtent[1] - yExtent[0]);
+        var yPixel = sy(yValue);
+        context.globalAlpha = 0.5;
+        context.strokeStyle = pal.line;
+        context.lineWidth = 1;
+        context.beginPath();
+        context.moveTo(padLeft, yPixel);
+        context.lineTo(width - padRight, yPixel);
+        context.stroke();
+        context.globalAlpha = 1;
+        context.fillStyle = pal.inkSoft;
+        context.fillText(yValue.toFixed(2), padLeft - 8, yPixel);
+      }
+
+      // Zero line (emphasised).
+      if (yExtent[0] < 0 && yExtent[1] > 0) {
+        context.globalAlpha = 0.85;
+        context.strokeStyle = pal.line;
+        context.lineWidth = 1.5;
+        context.beginPath();
+        context.moveTo(padLeft, sy(0));
+        context.lineTo(width - padRight, sy(0));
+        context.stroke();
+        context.globalAlpha = 1;
+      }
+
+      // ---- X-axis ticks + label ----
+      context.fillStyle = pal.inkSoft;
+      context.font = "600 15px " + pal.fontMono;
+      context.textAlign = "center";
+      context.textBaseline = "top";
+      var xTicks = 6;
+      for (var j = 0; j <= xTicks; j += 1) {
+        var tValue = tExtent[0] +
+          (j / xTicks) * (tExtent[1] - tExtent[0]);
+        context.fillText(
+          tValue.toFixed(0),
+          sx(tValue),
+          height - padBottom + 10
+        );
+      }
+      context.fillText("time (s)", padLeft + plotW / 2, height - 16);
+
+      // ---- Curves — draw in back-to-front order ----
+      function drawCurve(values, color, lineWidth) {
+        context.strokeStyle = color;
+        context.lineWidth = lineWidth;
+        context.lineJoin = "round";
+        context.lineCap = "round";
+        context.beginPath();
+        for (var k = 0; k < values.length; k += 1) {
+          var px = sx(time[k]);
+          var py = sy(values[k]);
+          if (k === 0) {
+            context.moveTo(px, py);
+          } else {
+            context.lineTo(px, py);
+          }
+        }
+        context.stroke();
+      }
+
+      // 1. FEM reference (grey, back layer)
+      drawCurve(reference, pal.inkMute, 2.0);
+      // 2. Transformer (blue, overlaps reference)
+      drawCurve(transformer, pal.primary, 2.4);
+      // 3. MLP (red, flat — prominent foreground)
+      drawCurve(mlp, pal.bad, 2.2);
+
+      // ---- Legend (three items spaced across the top) ----
+      context.font = "700 15px " + pal.fontMono;
+      context.textAlign = "left";
+      context.textBaseline = "middle";
+      var legY = 18;                      // vertical centre of legend row
+      var swW = 22;
+      var swH = 4;
+      var gap = 8;
+      // Distribute three items at 0%, 35%, 68% of plot width.
+      var item0X = padLeft + 8;
+      var item1X = padLeft + Math.round(plotW * 0.35);
+      var item2X = padLeft + Math.round(plotW * 0.68);
+
+      // FEM reference
+      context.fillStyle = pal.inkMute;
+      context.fillRect(item0X, legY - swH / 2, swW, swH);
+      context.fillText("FEM reference", item0X + swW + gap, legY);
+
+      // Transformer generator
+      context.fillStyle = pal.primary;
+      context.fillRect(item1X, legY - swH / 2, swW, swH);
+      context.fillText("Transformer generator", item1X + swW + gap, legY);
+
+      // MLP generator
+      context.fillStyle = pal.bad;
+      context.fillRect(item2X, legY - swH / 2, swW, swH);
+      context.fillText("MLP generator", item2X + swW + gap, legY);
+    }
+
+    build();
+
+    onResize(function () {
+      if (canvasState) {
+        canvasState = resizeCanvas(canvasState.canvas);
+        draw();
+      }
+    });
+
+    // Redraw once the slide is actually visible so the canvas is sized
+    // against the real rendered dimensions (not an off-screen estimate).
+    onSlideEnter(element, function () {
+      if (canvasState) {
+        canvasState = resizeCanvas(canvasState.canvas);
+        draw();
+      }
+    });
+
+    return {
+      redraw: draw,
+      destroy: function () { clearElement(element); }
+    };
+  };
+
+  // =================================================================
   // EMI.autoInit — wire up [data-emi] elements after Reveal is ready.
   // =================================================================
   EMI.autoInit = function () {
@@ -2627,6 +2823,8 @@
           suffix: node.dataset.suffix || "",
           colorClass: node.dataset.color || ""
         });
+      } else if (kind === "wgm-timehistory") {
+        EMI.wgmTimeHistory(node);
       }
     });
   };

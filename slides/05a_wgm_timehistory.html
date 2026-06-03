@@ -1,0 +1,41 @@
+<!-- Owner: method-author. WGM time-history: MLP collapse vs Transformer tracking. -->
+<section>
+  <p class="eyebrow">Why a Transformer?</p>
+  <h2 class="headline">The MLP generator collapses to a flat mean &mdash; the Transformer tracks.</h2>
+
+  <div class="chart tall" data-emi="wgm-timehistory"></div>
+
+  <p style="font-size: 0.68em; color: var(--ink-soft); line-height: 1.6;
+            max-width: 72ch; margin: var(--space-2) 0 0;">
+    Same task, same data: the MLP weight-generator outputs a constant; the
+    Transformer-generated weights reproduce the full response.
+  </p>
+
+  <p class="caption" style="margin-top: var(--space-1);">
+    Single-building diagnostic &mdash; building&nbsp;0, top floor (normalized displacement).
+  </p>
+
+  <aside class="notes">
+    This slide shows the raw time-history output for one building (building 0,
+    top floor, normalized displacement) — the same case quantified on the next slide.
+
+    Grey line (FEM reference): the OpenSees ground-truth response over 60 seconds
+    of wind loading. The signal oscillates across a wide amplitude range.
+
+    Blue line (Transformer generator): nearly invisible because it overlaps the
+    grey reference almost exactly — RMSE 0.012, std-ratio 0.99. The generated
+    weights reproduce the full oscillatory response.
+
+    Red line (MLP generator): a near-perfectly FLAT horizontal line at ≈ −0.282.
+    This is the collapsed output: the MLP weight-generator cannot escape the
+    mean-prediction attractor. RMSE 0.116 (≈ 10× worse); std-ratio ≈ 0 (2.1 × 10⁻⁵).
+
+    Key message: the failure mode is visually unambiguous — one model tracks, one
+    predicts a constant. The next slide (05b) quantifies this with RMSE bars.
+
+    Framing note: these are 500-epoch runs using the standard training schedule.
+    The MLP can partially escape the collapse with 4× more training (2000 epochs),
+    but never reaches the Transformer's accuracy. The Transformer converges
+    reliably every run with no special schedule.
+  </aside>
+</section>

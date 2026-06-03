@@ -46,6 +46,7 @@ DATA_FILES = {
     "overlays.json": "overlays",
     "results.json": "results",
     "mimo.json": "mimo",
+    "wgm_compare.json": "wgmCompare",
 }
 
 
