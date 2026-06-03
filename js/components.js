@@ -18,7 +18,7 @@
  *     over time, with interactive controls. Always shows the FINAL
  *     model (orange) vs FEM (blue) — there is no version toggle.
  *     options = {
- *       load:    "wind" | "constant" | "sine" | "impulse"  (default "wind")
+ *       load:    "wind" | "constant" | "sine"  (default "wind")
  *       floor:   integer top-floor index (informational; data is the
  *                top-floor series baked by data-prep)         (optional)
  *       controls: boolean — show load-class + Play controls (default true)
@@ -34,17 +34,16 @@
  *     Two stacked SVG panels for one load class (window.EMI_DATA.mimo):
  *     TOP applied forces per shown floor (multi-force input); BOTTOM
  *     per-floor displacement, FEM (solid) vs final model (dashed accent).
- *     options = { load: "wind"|"constant"|"sine"|"impulse" (default wind) }
+ *     options = { load: "wind"|"constant"|"sine" (default wind) }
  *     Load-class buttons + autoplay sweep on entry (static in print).
  *     Returns { redraw(), setLoad(name), startSweep(), destroy() }.
  *
  *   EMI.bars(element, options)
  *     Animated bar chart of the FINAL model's population NRMSE — ONE bar
- *     per load class (wind, constant, sine, impulse), log y-axis, values
- *     shown as %. No v1/v2/v3 versions. Impulse (54.2%) is tinted --bad
- *     and labelled "current limit". Staged by reveal fragments: each
+ *     per load class (wind, constant, sine), log y-axis, values
+ *     shown as %. No v1/v2/v3 versions. Staged by reveal fragments: each
  *     fragmentshown reveals one more class, in order; with no fragments
- *     all four bars show on slide entry.
+ *     all three bars show on slide entry.
  *     options = {
  *       metric: key under results (default "population_nrmse")
  *     }
@@ -410,12 +409,11 @@
   EMI.overlay = function (element, options) {
     options = options || {};
     var data = emiData().overlays;
-    var loadClasses = ["wind", "constant", "sine", "impulse"];
+    var loadClasses = ["wind", "constant", "sine"];
     var loadLabels = {
       wind: "Wind",
       constant: "Constant",
-      sine: "Sine",
-      impulse: "Impulse"
+      sine: "Sine"
     };
 
     if (!data) {
@@ -837,9 +835,9 @@
   // =================================================================
   EMI.mimo = function (element, options) {
     options = options || {};
-    var loadClasses = ["wind", "constant", "sine", "impulse"];
+    var loadClasses = ["wind", "constant", "sine"];
     var loadLabels = {
-      wind: "Wind", constant: "Constant", sine: "Sine", impulse: "Impulse"
+      wind: "Wind", constant: "Constant", sine: "Sine"
     };
     var data = emiData().mimo;
 
@@ -1280,12 +1278,11 @@
     var metricKey = options.metric || "population_nrmse";
     var results = emiData().results;
     var metric = results ? results[metricKey] : null;
-    var loadClasses = ["wind", "constant", "sine", "impulse"];
+    var loadClasses = ["wind", "constant", "sine"];
     var loadLabels = {
       wind: "Wind",
       constant: "Constant",
-      sine: "Sine",
-      impulse: "Impulse"
+      sine: "Sine"
     };
 
     if (!metric) {
@@ -1304,9 +1301,9 @@
     var canvasState = mountCanvas(element);
 
     // One bar per load class showing the FINAL model's population NRMSE
-    // (no v1/v2/v3 versions). Impulse is tinted as the current limit.
-    function classColor(loadName) {
-      return loadName === "impulse" ? pal.bad : pal.primary;
+    // (no v1/v2/v3 versions). All three classes use the primary colour.
+    function classColor() {
+      return pal.primary;
     }
 
     // Final model's percentage NRMSE for a class: prefer "v3", else the
@@ -1416,26 +1413,20 @@
         var grow = revealed ? progress : 0;
         var drawnTop = baseY - (baseY - topY) * grow;
 
-        var isLimit = loadName === "impulse";
-        context.fillStyle = classColor(loadName);
+        context.fillStyle = classColor();
         context.globalAlpha = revealed ? 1 : 0.12;
         context.fillRect(barX, drawnTop, barWidth, baseY - drawnTop);
         context.globalAlpha = 1;
 
-        // Value label + current-limit call-out.
+        // Value label.
         if (revealed && progress > 0.55) {
-          context.fillStyle = isLimit ? pal.bad : pal.ink;
+          context.fillStyle = pal.ink;
           context.font = "700 18px " + pal.fontMono;
           context.textAlign = "center";
           context.textBaseline = "bottom";
           var valueLabel = (value >= 10 ? value.toFixed(1)
             : value.toFixed(2)) + "%";
           context.fillText(valueLabel, columnCenter, drawnTop - 6);
-          if (isLimit) {
-            context.fillStyle = pal.bad;
-            context.font = "600 13px " + pal.fontMono;
-            context.fillText("current limit", columnCenter, drawnTop - 28);
-          }
         }
       });
 
@@ -1486,9 +1477,9 @@
     });
 
     // Fragment-driven staging: each visible fragment reveals one more
-    // load-class bar, in order (wind, constant, sine, impulse). So a
-    // slide with 4 empty `.fragment` placeholders reveals one bar per
-    // click. With no fragments, all four bars show on slide entry.
+    // load-class bar, in order (wind, constant, sine). So a slide with
+    // 3 empty `.fragment` placeholders reveals one bar per click. With
+    // no fragments, all three bars show on slide entry.
     onFragmentChange(element, function (fragmentCount) {
       var section = containingSection(element);
       var hasFragments = section &&

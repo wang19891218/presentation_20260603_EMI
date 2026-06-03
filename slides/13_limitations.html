@@ -7,8 +7,7 @@
 
     <li class="accent">
       <strong>More complex loads &mdash; the immediate next step.</strong>
-      Improve impulse coverage; extend to blast, multi-hazard, and
-      arbitrary broadband excitations.
+      Extend to blast, multi-hazard, and arbitrary broadband excitations.
     </li>
 
     <li class="accent">
@@ -29,14 +28,10 @@
     Keep this slide forward-looking and light. The model is a strong
     working foundation; these are natural, well-motivated next steps.
 
-    Most immediate: extending to more complex loads. Impulse at 54.2%
-    NRMSE is the clearest gap to close first. The training amplitude
-    envelope [0.48, 1.16] MN is the most tractable near-term fix —
-    regenerating the impulse dataset under U(0.5, 5.0) MN would close
-    the OOD gap at the cost of a new generation run. Phase drift under
-    sustained near-resonance sine (~39 cycles over 60 s) is a known
-    limitation of autoregressive LSTM rollout; a phase-aware loss term
-    is the clean separable extension.
+    Most immediate: extending to more complex loads — blast, multi-hazard,
+    and arbitrary broadband excitations. The current training distribution
+    covers wind, constant, and sine; broadening the load variety is the
+    natural near-term step.
 
     Physics-informed / knowledge-enhanced training (KEDL-style,
     Wang 2020) would embed governing equations into the training
